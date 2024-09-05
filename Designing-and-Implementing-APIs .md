@@ -1,4 +1,4 @@
-Certainly! Below is a guide that follows a similar structure to the one you provided for the **Memory Game Workshop**, adapted for each of the previous examples:
+Here is the updated version with the requested content removed:
 
 ---
 
@@ -9,69 +9,6 @@ In this workshop, we will be building a REST API backend for a microservice appl
 ## Introduction
 
 We will be using Copilot to help us extend our existing microservice application by adding backend REST API endpoints. The focus of this workshop will be on how Copilot can assist in **API design, request/response handling, data validation, error handling, and API documentation**.
-
-<!-- include (../how_to_use_guide.md) -->
-
-## How to Use This Guide
-
-Each module builds on the previous one, so it is important to complete them in order.
-
-<details>
-<summary><strong>Show More</strong></summary>
-<blockquote>
-
-Each module contains a series of prompts that you can use to interact with Copilot. The prompts are meant to guide you through the workshop and help you understand how Copilot can assist you in building a REST API backend.
-
-Please take a moment to familiarize yourself with the different conventions used in this guide.
-
-### Prompts
-
-```markdown
-This is a prompt
-```
-
-Prompts are meant to be typed into the Copilot prompt bar. They are used to guide Copilot to generate code or provide information.
-
-```markdown
-This is a prompt with a #file:filename.go directive
-```
-
-The prompts with a **#** directive need to be typed directly into the Copilot prompt bar. For all other prompts, you can copy and paste them into the prompt bar.
-
-### Hints
-
-> This is a hint or a tip
-
-Throughout the guide, you will find hints and tips to provide more insights into getting the most out of Copilot. Feel free to experiment with the hints and tips to see how they can help you.
-
-### Expected Output
-
-<details>
-<summary><strong>View Response</strong></summary>
-<blockquote>
-
-Code suggestions or sample outputs from Copilot can be viewed here for reference\. You can expand and collapse the content as needed by clicking the _View Response_ header.
-
-</blockquote>
-</details>
-
-Copilot will generate code based on the prompts you provide. Since there are many ways to solve a coding challenge, the suggested code may vary slightly based on the context provided by the prompt, your previous interactions with Copilot, and the comments in the codebase.
-
-To help you along, we have provided some possible outputs for some of the prompts. This will give you an idea of what to expect when you run the prompt. We encourage you to experiment with the prompts and see how Copilot can help you.
-
-### Checkpoints
-
-Throughout the workshop, you will find checkpoints that summarize the code you have generated so far. These checkpoints are meant to help you keep track of your progress and ensure that you have completed the tasks correctly.
-
-If your experimentations with Copilot lead you to a different solution, feel free to use the code in the checkpoints as a reference to ensure you are on the right track.
-
-### Skeleton Project
-
-We've provided you with a skeleton project to help you get up and running. Each file in the skeleton project contains comments that will guide you through the different sections.
-
-</blockquote>
-</details>
-<!-- /include -->
 
 ---
 
@@ -299,4 +236,4 @@ We encourage you to continue experimenting with Copilot to improve and expand yo
 
 ---
 
-Feel free to expand the workshop with more specific examples as needed!
+Let me know if you need further changes!
