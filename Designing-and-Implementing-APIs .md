@@ -1,4 +1,4 @@
-# API Development Workshop
+# Designing and Implementing APIs with GitHub Copilot
 
 In this workshop, we will be building a REST API backend for a microservice application in Go (or your preferred language) using **GitHub Copilot**.
 
