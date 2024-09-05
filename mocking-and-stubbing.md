@@ -1,6 +1,3 @@
-Here’s a refined version of the `.md` file with improved formatting and structure, following your content closely:
-
-```markdown
 # Mocking and Stubbing with GitHub Copilot
 
 In this slide, we'll dive deep into the concepts of **mocking** and **stubbing** with GitHub Copilot, and see how these techniques can enhance your testing practices.
