@@ -153,15 +153,6 @@ if __name__ == '__main__':
 </details>
 
 ---
-
-### Explanation:
-#### Step 1: Import unittest and patch from unittest.mock, and requests.
-#### Step 2: Define the `fetch_data_from_api` function that makes an external API call using `requests.get`.
-#### Step 3: Create a test case class `TestFetchDataFromAPI` that inherits from `unittest.TestCase`.
-#### Step 4: Use `@patch('requests.get')` to mock the `requests.get` method.
-#### Step 5: Configure the mock to return a mock response with a specific JSON payload.
-#### Step 6: Write the `test_fetch_data_from_api` method to verify that the function returns the expected result and that the `requests.get` method was called with the correct URL.
-
 This test case can now be used to verify the behavior of the `fetch_data_from_api` function without making actual network requests.
 
 ---
