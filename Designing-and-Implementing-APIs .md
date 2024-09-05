@@ -1,6 +1,6 @@
 # Designing and Implementing APIs with GitHub Copilot
 
-In this workshop, we will be building a REST API backend for a microservice application in Go (or your preferred language) using **GitHub Copilot**.
+In this slide, we’ll explore how GitHub Copilot can assist you building a REST API backend for a microservice application in Go (or your preferred language) using **GitHub Copilot**.
 
 ## Introduction
 
