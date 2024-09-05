@@ -98,19 +98,6 @@ fetchStub.restore();
 
 ---
 
-### Explanation:
-#### Step 1: Import Sinon.js
-- Import the `Sinon.js` library to use its stubbing functionalities.
-
-#### Step 2: Define the `fetchDataFromAPI` function
-- Define the `fetchDataFromAPI` function that makes an external API call using the `fetch` method.
-
-#### Step 3: Create a Stub for the Global `fetch` Method
-- Use `sinon.stub` to create a stub for the global `fetch` method.
-
-#### Step 4: Configure the Stub
-- Configure the stub to return a mock response whenever the `fetch` method is called.
-
 This stub can now be used in unit tests to simulate the behavior of the external API call without making actual network requests.
 
 ---
