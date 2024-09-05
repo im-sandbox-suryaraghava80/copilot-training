@@ -1,4 +1,4 @@
-# Topic: Microservice Architecture, Serverless Functions, and More
+Microservice Architecture, Serverless Functions, and More
 
 In this slide, we’re going to explore how GitHub Copilot can assist in designing **microservice architectures**, developing **serverless functions**, and managing other essential elements such as **service communication**, **API gateway setup**, **container orchestration**, and **cloud deployment**.
 
@@ -52,23 +52,25 @@ Generate an AWS Lambda function that triggers when a file is uploaded to an S3 b
 import json
 import boto3
 
-s3 = boto3.client('s3')
-
 def lambda_handler(event, context):
-    # Get the S3 bucket and file information from the event
+    # Get the S3 bucket and object key from the event
     bucket = event['Records'][0]['s3']['bucket']['name']
     key = event['Records'][0]['s3']['object']['key']
     
-    # Process the file (example: read the file from S3)
-    response = s3.get_object(Bucket=bucket, Key=key)
-    file_content = response['Body'].read().decode('utf-8')
+    # Log the bucket and key
+    print(f"Bucket: {bucket}, Key: {key}")
     
-    # Log the file content or perform further processing
-    print(f"File content: {file_content}")
+    # Process the file (example: read the file content)
+    s3 = boto3.client('s3')
+    response = s3.get_object(Bucket=bucket, Key=key)
+    content = response['Body'].read().decode('utf-8')
+    
+    # Log the content
+    print(f"Content: {content}")
     
     return {
         'statusCode': 200,
-        'body': json.dumps('File processed successfully!')
+        'body': json.dumps('File processed successfully')
     }
 ```
 </blockquote>
@@ -90,14 +92,25 @@ Generate a Dockerfile to containerize a Python microservice
 <blockquote>
 
 ```dockerfile
-# Dockerfile
+# Use the official Python base image
 FROM python:3.9-slim
 
+# Set the working directory inside the container
 WORKDIR /app
+
+# Copy the requirements file into the container
 COPY requirements.txt .
-RUN pip install -r requirements.txt
+
+# Install the dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the rest of the application code into the container
 COPY . .
 
+# Expose the port the microservice will run on
+EXPOSE 5000
+
+# Define the command to run the application
 CMD ["python", "app.py"]
 ```
 </blockquote>
@@ -115,27 +128,44 @@ Generate a Kubernetes deployment configuration for the microservice
 <blockquote>
 
 ```yaml
-# Kubernetes Deployment YAML
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: my-microservice
+  name: python-microservice
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: my-microservice
+      app: python-microservice
   template:
     metadata:
       labels:
-        app: my-microservice
+        app: python-microservice
     spec:
       containers:
-      - name: my-microservice
-        image: my-microservice:latest
+      - name: python-microservice
+        image: your-dockerhub-username/python-microservice:latest
         ports:
-        - containerPort: 80
+        - containerPort: 5000
+        env:
+        - name: ENV_VAR_NAME
+          value: "value"
 ```
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: python-microservice
+spec:
+  selector:
+    app: python-microservice
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5000
+  type: LoadBalancer
+```
+
 </blockquote>
 </details>
 
