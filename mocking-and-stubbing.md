@@ -43,6 +43,11 @@ if __name__ == "__main__":
 
 With GitHub Copilot, creating mock objects becomes much easier. Copilot can understand the context of your code and help you generate mock objects that align with your test scenarios.
 
+</blockquote>
+</details>
+
+---
+
 ## What is Stubbing?
 
 **Stubbing** is closely related to mocking but focuses on replacing a method with code that returns hardcoded values. In essence, a stub is a piece of code that stands in for some other code.
