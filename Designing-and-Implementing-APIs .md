@@ -30,32 +30,36 @@ Generate a basic API endpoint for retrieving user data #file:main.go
 package main
 
 import (
-	"encoding/json"
-	"net/http"
+    "encoding/json"
+    "net/http"
 )
 
+// User represents a user in the system
 type User struct {
-	ID   int    `json:"id"`
-	Name string `json:"name"`
+    ID    int    `json:"id"`
+    Name  string `json:"name"`
+    Email string `json:"email"`
 }
 
+// Sample user data
 var users = []User{
-	{ID: 1, Name: "Alice"},
-	{ID: 2, Name: "Bob"},
+    {ID: 1, Name: "John Doe", Email: "john.doe@example.com"},
+    {ID: 2, Name: "Jane Smith", Email: "jane.smith@example.com"},
 }
 
+// getUsers handles the /users endpoint
 func getUsers(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(users)
+    w.Header().Set("Content-Type", "application/json")
+    json.NewEncoder(w).Encode(users)
 }
 
 func main() {
-	http.HandleFunc("/users", getUsers)
-	http.ListenAndServe(":8080", nil)
+    http.HandleFunc("/users", getUsers)
+    http.ListenAndServe(":8080", nil)
 }
 ```
 
-This creates a simple API endpoint `/users` that returns a list of users in JSON format.
+This code sets up a basic HTTP server in Go that listens on port 8080 and provides an endpoint /users to retrieve user data in JSON format.
 
 </blockquote>
 </details>
@@ -75,26 +79,65 @@ Generate a POST API endpoint for creating a new user #file:main.go
 <blockquote>
 
 ```go
+package main
+
+import (
+    "encoding/json"
+    "net/http"
+    "strconv"
+)
+
+// User represents a user in the system
+type User struct {
+    ID    int    `json:"id"`
+    Name  string `json:"name"`
+    Email string `json:"email"`
+}
+
+// Sample user data
+var users = []User{
+    {ID: 1, Name: "John Doe", Email: "john.doe@example.com"},
+    {ID: 2, Name: "Jane Smith", Email: "jane.smith@example.com"},
+}
+
+// getUsers handles the /users endpoint for retrieving user data
+func getUsers(w http.ResponseWriter, r *http.Request) {
+    w.Header().Set("Content-Type", "application/json")
+    json.NewEncoder(w).Encode(users)
+}
+
+// createUser handles the /users endpoint for creating a new user
 func createUser(w http.ResponseWriter, r *http.Request) {
-	var newUser User
-	err := json.NewDecoder(r.Body).Decode(&newUser)
-	if err != nil {
-		http.Error(w, "Invalid input", http.StatusBadRequest)
-		return
-	}
-	users = append(users, newUser)
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(newUser)
+    var newUser User
+    if err := json.NewDecoder(r.Body).Decode(&newUser); err != nil {
+        http.Error(w, err.Error(), http.StatusBadRequest)
+        return
+    }
+
+    // Assign a new ID to the user
+    newUser.ID = len(users) + 1
+    users = append(users, newUser)
+
+    w.Header().Set("Content-Type", "application/json")
+    w.WriteHeader(http.StatusCreated)
+    json.NewEncoder(w).Encode(newUser)
 }
 
 func main() {
-	http.HandleFunc("/users", getUsers)
-	http.HandleFunc("/users/create", createUser)
-	http.ListenAndServe(":8080", nil)
+    http.HandleFunc("/users", func(w http.ResponseWriter, r *http.Request) {
+        if r.Method == http.MethodGet {
+            getUsers(w, r)
+        } else if r.Method == http.MethodPost {
+            createUser(w, r)
+        } else {
+            http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+        }
+    })
+    http.ListenAndServe(":8080", nil)
 }
 ```
 
-This adds a `/users/create` POST endpoint to create new users.
+This code adds a POST endpoint to create a new user. The createUser function decodes the incoming JSON request, assigns a new ID to the user, appends the user to the users slice, and returns the created user in the response. The /users endpoint now supports both GET and POST methods.
 
 </blockquote>
 </details>
@@ -114,20 +157,70 @@ Add data validation to ensure that a user cannot have an empty name #file:main.g
 <blockquote>
 
 ```go
+package main
+
+import (
+    "encoding/json"
+    "net/http"
+)
+
+// User represents a user in the system
+type User struct {
+    ID    int    `json:"id"`
+    Name  string `json:"name"`
+    Email string `json:"email"`
+}
+
+// Sample user data
+var users = []User{
+    {ID: 1, Name: "John Doe", Email: "john.doe@example.com"},
+    {ID: 2, Name: "Jane Smith", Email: "jane.smith@example.com"},
+}
+
+// getUsers handles the /users endpoint for retrieving user data
+func getUsers(w http.ResponseWriter, r *http.Request) {
+    w.Header().Set("Content-Type", "application/json")
+    json.NewEncoder(w).Encode(users)
+}
+
+// createUser handles the /users endpoint for creating a new user
 func createUser(w http.ResponseWriter, r *http.Request) {
-	var newUser User
-	err := json.NewDecoder(r.Body).Decode(&newUser)
-	if err != nil || newUser.Name == "" {
-		http.Error(w, "Invalid input: Name cannot be empty", http.StatusBadRequest)
-		return
-	}
-	users = append(users, newUser)
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(newUser)
+    var newUser User
+    if err := json.NewDecoder(r.Body).Decode(&newUser); err != nil {
+        http.Error(w, err.Error(), http.StatusBadRequest)
+        return
+    }
+
+    // Validate that the name is not empty
+    if newUser.Name == "" {
+        http.Error(w, "Name cannot be empty", http.StatusBadRequest)
+        return
+    }
+
+    // Assign a new ID to the user
+    newUser.ID = len(users) + 1
+    users = append(users, newUser)
+
+    w.Header().Set("Content-Type", "application/json")
+    w.WriteHeader(http.StatusCreated)
+    json.NewEncoder(w).Encode(newUser)
+}
+
+func main() {
+    http.HandleFunc("/users", func(w http.ResponseWriter, r *http.Request) {
+        if r.Method == http.MethodGet {
+            getUsers(w, r)
+        } else if r.Method == http.MethodPost {
+            createUser(w, r)
+        } else {
+            http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+        }
+    })
+    http.ListenAndServe(":8080", nil)
 }
 ```
 
-Now, the API will return a `400 Bad Request` if the user's name is empty.
+This code adds validation to the createUser function to ensure that the Name field is not empty. If the Name is empty, it returns a 400 Bad Request status with an appropriate error message.
 
 </blockquote>
 </details>
@@ -147,16 +240,75 @@ Add documentation for the createUser endpoint #file:main.go
 <blockquote>
 
 ```go
-// createUser creates a new user with a given name.
-// It expects a JSON payload in the format:
-// {
-//   "id": int,
-//   "name": "string"
-// }
-// If the "name" field is empty, it returns a 400 Bad Request.
+package main
+
+import (
+    "encoding/json"
+    "net/http"
+)
+
+// User represents a user in the system
+type User struct {
+    ID    int    `json:"id"`
+    Name  string `json:"name"`
+    Email string `json:"email"`
+}
+
+// Sample user data
+var users = []User{
+    {ID: 1, Name: "John Doe", Email: "john.doe@example.com"},
+    {ID: 2, Name: "Jane Smith", Email: "jane.smith@example.com"},
+}
+
+// getUsers handles the /users endpoint for retrieving user data
+func getUsers(w http.ResponseWriter, r *http.Request) {
+    w.Header().Set("Content-Type", "application/json")
+    json.NewEncoder(w).Encode(users)
+}
+
+// createUser handles the /users endpoint for creating a new user
+// @route POST /users
+// @param {string} name - The name of the user (required)
+// @param {string} email - The email of the user (optional)
+// @response 201 - Created, returns the created user
+// @response 400 - Bad Request, if the name is empty or the request body is invalid
+func createUser(w http.ResponseWriter, r *http.Request) {
+    var newUser User
+    if err := json.NewDecoder(r.Body).Decode(&newUser); err != nil {
+        http.Error(w, err.Error(), http.StatusBadRequest)
+        return
+    }
+
+    // Validate that the name is not empty
+    if newUser.Name == "" {
+        http.Error(w, "Name cannot be empty", http.StatusBadRequest)
+        return
+    }
+
+    // Assign a new ID to the user
+    newUser.ID = len(users) + 1
+    users = append(users, newUser)
+
+    w.Header().Set("Content-Type", "application/json")
+    w.WriteHeader(http.StatusCreated)
+    json.NewEncoder(w).Encode(newUser)
+}
+
+func main() {
+    http.HandleFunc("/users", func(w http.ResponseWriter, r *http.Request) {
+        if r.Method == http.MethodGet {
+            getUsers(w, r)
+        } else if r.Method == http.MethodPost {
+            createUser(w, r)
+        } else {
+            http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+        }
+    })
+    http.ListenAndServe(":8080", nil)
+}
 ```
 
-This automatically generates basic documentation for the API endpoint.
+This code adds documentation comments to the createUser function, detailing the endpoint, request method, required and optional parameters, and possible responses.
 
 </blockquote>
 </details>
@@ -179,37 +331,77 @@ Generate unit tests for the createUser function #file:main_test.go
 package main
 
 import (
-	"bytes"
-	"net/http"
-	"net/http/httptest"
-	"testing"
+    "bytes"
+    "encoding/json"
+    "net/http"
+    "net/http/httptest"
+    "testing"
 )
 
+// TestCreateUser tests the createUser function
 func TestCreateUser(t *testing.T) {
-	// Valid user creation
-	body := bytes.NewBufferString(`{"id":3,"name":"Charlie"}`)
-	req, _ := http.NewRequest("POST", "/users/create", body)
-	rr := httptest.NewRecorder()
-	handler := http.HandlerFunc(createUser)
-	handler.ServeHTTP(rr, req)
+    tests := []struct {
+        name           string
+        input          User
+        expectedStatus int
+        expectedBody   string
+    }{
+        {
+            name:           "Valid user creation",
+            input:          User{Name: "Alice", Email: "alice@example.com"},
+            expectedStatus: http.StatusCreated,
+            expectedBody:   `{"id":3,"name":"Alice","email":"alice@example.com"}`,
+        },
+        {
+            name:           "Empty name",
+            input:          User{Name: "", Email: "empty@example.com"},
+            expectedStatus: http.StatusBadRequest,
+            expectedBody:   "Name cannot be empty\n",
+        },
+        {
+            name:           "Invalid JSON",
+            input:          User{},
+            expectedStatus: http.StatusBadRequest,
+            expectedBody:   "EOF\n",
+        },
+    }
 
-	if status := rr.Code; status != http.StatusOK {
-		t.Errorf("Handler returned wrong status code: got %v want %v", status, http.StatusOK)
-	}
+    for _, tt := range tests {
+        t.Run(tt.name, func(t *testing.T) {
+            var body []byte
+            var err error
 
-	// Invalid user creation (empty name)
-	body = bytes.NewBufferString(`{"id":4,"name":""}`)
-	req, _ = http.NewRequest("POST", "/users/create", body)
-	rr = httptest.NewRecorder()
-	handler.ServeHTTP(rr, req)
+            if tt.name == "Invalid JSON" {
+                body = []byte("{invalid json}")
+            } else {
+                body, err = json.Marshal(tt.input)
+                if err != nil {
+                    t.Fatalf("Failed to marshal input: %v", err)
+                }
+            }
 
-	if status := rr.Code; status != http.StatusBadRequest {
-		t.Errorf("Handler returned wrong status code: got %v want %v", status, http.StatusBadRequest)
-	}
+            req, err := http.NewRequest(http.MethodPost, "/users", bytes.NewBuffer(body))
+            if err != nil {
+                t.Fatalf("Failed to create request: %v", err)
+            }
+
+            rr := httptest.NewRecorder()
+            handler := http.HandlerFunc(createUser)
+            handler.ServeHTTP(rr, req)
+
+            if status := rr.Code; status != tt.expectedStatus {
+                t.Errorf("handler returned wrong status code: got %v want %v", status, tt.expectedStatus)
+            }
+
+            if rr.Body.String() != tt.expectedBody {
+                t.Errorf("handler returned unexpected body: got %v want %v", rr.Body.String(), tt.expectedBody)
+            }
+        })
+    }
 }
 ```
 
-These tests validate both valid and invalid user creation.
+This code defines unit tests for the createUser function, covering valid user creation, user creation with an empty name, and invalid JSON in the request body. Each test case checks the response status code and body to ensure the function behaves as expected.
 
 </blockquote>
 </details>
@@ -225,15 +417,3 @@ In this workshop, we explored how GitHub Copilot can assist in:
 - Automatically generating API documentation
 - Writing unit tests for API functionality
 
-We encourage you to continue experimenting with Copilot to improve and expand your API functionality.
-
----
-
-### For Your Further Learning
-
-- **Using Copilot for Serverless Functions**: Explore how Copilot can generate AWS Lambda or Azure Functions.
-- **Containerization with Docker**: Learn how to use Copilot to create Dockerfiles and Kubernetes configurations.
-
----
-
-Let me know if you need further changes!
