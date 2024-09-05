@@ -1,7 +1,3 @@
-Here is the updated version with the requested content removed:
-
----
-
 # API Development Workshop
 
 In this workshop, we will be building a REST API backend for a microservice application in Go (or your preferred language) using **GitHub Copilot**.
