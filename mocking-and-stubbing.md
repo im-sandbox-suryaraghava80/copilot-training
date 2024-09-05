@@ -1,3 +1,6 @@
+Here’s a refined version of the `.md` file with improved formatting and structure, following your content closely:
+
+```markdown
 # Mocking and Stubbing with GitHub Copilot
 
 In this slide, we'll dive deep into the concepts of **mocking** and **stubbing** with GitHub Copilot, and see how these techniques can enhance your testing practices.
@@ -96,20 +99,24 @@ fetchStub.restore();
 </blockquote>
 </details>
 
-Explanation:
-### Step 1: Import Sinon.js
+---
+
+### Explanation:
+#### Step 1: Import Sinon.js
 - Import the `Sinon.js` library to use its stubbing functionalities.
 
-### Step 2: Define the `fetchDataFromAPI` function
+#### Step 2: Define the `fetchDataFromAPI` function
 - Define the `fetchDataFromAPI` function that makes an external API call using the `fetch` method.
 
-### Step 3: Create a Stub for the Global `fetch` Method
+#### Step 3: Create a Stub for the Global `fetch` Method
 - Use `sinon.stub` to create a stub for the global `fetch` method.
 
-### Step 4: Configure the Stub
+#### Step 4: Configure the Stub
 - Configure the stub to return a mock response whenever the `fetch` method is called.
 
 This stub can now be used in unit tests to simulate the behavior of the external API call without making actual network requests.
+
+---
 
 ## How Can GitHub Copilot Help with Mocking and Stubbing?
 
@@ -161,21 +168,27 @@ if __name__ == '__main__':
 </blockquote>
 </details>
 
-Explanation:
-## Step 1: Import unittest and patch from unittest.mock, and requests.
-## Step 2: Define the fetch_data_from_api function that makes an external API call using requests.get.
-## Step 3: Create a test case class TestFetchDataFromAPI that inherits from unittest.TestCase.
-## Step 4: Use @patch('requests.get') to mock the requests.get method.
-## Step 5: Configure the mock to return a mock response with a specific JSON payload.
-## Step 6: Write the test_fetch_data_from_api method to verify that the function returns the expected result and that the requests.get method was called with the correct URL.
+---
 
-This test case can now be used to verify the behavior of the fetch_data_from_api function without making actual network requests.
+### Explanation:
+#### Step 1: Import unittest and patch from unittest.mock, and requests.
+#### Step 2: Define the `fetch_data_from_api` function that makes an external API call using `requests.get`.
+#### Step 3: Create a test case class `TestFetchDataFromAPI` that inherits from `unittest.TestCase`.
+#### Step 4: Use `@patch('requests.get')` to mock the `requests.get` method.
+#### Step 5: Configure the mock to return a mock response with a specific JSON payload.
+#### Step 6: Write the `test_fetch_data_from_api` method to verify that the function returns the expected result and that the `requests.get` method was called with the correct URL.
+
+This test case can now be used to verify the behavior of the `fetch_data_from_api` function without making actual network requests.
+
+---
 
 ## Why Use Mocking and Stubbing?
 
 Mocks and stubs help create an isolated environment where you control the behavior of dependencies. This results in more reliable and faster tests. It also allows you to test edge cases, error handling, and time-sensitive scenarios without worrying about the state of your actual dependencies.
 
 Mocks are especially useful in **Test-Driven Development (TDD)**, where you write tests before implementing the actual functionality. The tests define the behavior of the code, and mock objects help simulate that behavior.
+
+---
 
 ## Popular Mocking Frameworks Supported by Copilot
 
@@ -199,41 +212,48 @@ Generate a mock using Mockito for a Java class that makes a database call
 
 ```java
 import static org.mockito.Mockito.*;
+import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 public class DatabaseServiceTest {
+
+    @Mock
+    private DatabaseService databaseService;
+
+    @Before
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
     @Test
     public void testGetData() {
-        // Arrange: Create a mock for the DatabaseService
-        DatabaseService dbService = mock(DatabaseService.class);
-        
-        // Stub the getData method
-        when(dbService.getData()).thenReturn("Mocked Data");
-        
-        // Act: Call the method under test
-        String result = dbService.getData();
-        
-        // Assert: Verify the result
-        assertEquals("Mocked Data", result);
+        // Step 5: Set up the mock to return a specific value
+        when(databaseService.getData()).thenReturn("Mock Data");
+
+        // Call the method
+        String result = databaseService.getData();
+
+        // Step 6: Write the test method to verify the behavior
+        assertEquals("Mock Data", result);
     }
 }
 ```
 </blockquote>
 </details>
 
-With Copilot, you can generate code for mocking frameworks in various languages, enhancing your ability to write reliable unit tests.
+This test case can now be used to verify the behavior of the DatabaseService class without making actual database calls.
+
+---
 
 ## Best Practices When Using Copilot for Mocking and Stubbing
 
-1. **Be Explicit**: Clearly define what you want to mock or stub. Use comments to guide Copilot, such as `// Mock the database call`.
+1. **Be Explicit**: Clearly define what you want to mock or stub. Use comments to guide Copilot.
    
 2. **Verify Interactions**: Always verify that the mock objects are being called as expected. This helps catch unintended side effects and ensures the mock setup is correct.
    
 3. **Use Stubs for Simplicity**: If you only need a method to return a specific value, use stubs. They are simpler to set up and easier to understand.
    
-4. **Avoid Over-Mocking**: While mocking is powerful, avoid over-mocking your tests. If you mock too many things, your test cases may become too tightly coupled to the implementation rather than the behavior.
-   
-5. **Leverage Copilot Suggestions**: Trust Copilot’s suggestions but always review the generated code. It’s a tool to help you, not replace you.
-
-## Conclusion
-
-Mocking and stubbing are essential techniques in modern software development, enabling you to write robust, isolated unit tests. With GitHub Copilot, you can generate mock objects and stub methods effortlessly, enhancing your testing workflow and allowing you to focus more on the logic of your code rather than the boilerplate.
+4. **Avoid Over-Mocking**: While mocking is powerful
